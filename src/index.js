@@ -1,6 +1,6 @@
-import SynteticSpeech from './SynteticSpeech';
-import TerminatorInterface from './TerminatorInterface';
-import VideoScene from './VideoScene';
+import SynteticSpeech from './classes/SynteticSpeech';
+import TerminatorInterface from './classes/TerminatorInterface';
+import VideoScene from './classes/VideoScene';
 
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -16,7 +16,7 @@ if (window.innerWidth < 770) {
   [width, height] = [window.innerWidth, window.innerHeight];
 }
 
-const voice = new SynteticSpeech('en-US', window.speechSynthesis);
+const voice = new SynteticSpeech('en-US', window.speechSynthesis, window.SpeechSynthesisUtterance);
 voice.setRate(1);
 voice.setPitch(0.4);
 voice.setText('Movement');

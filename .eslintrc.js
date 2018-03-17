@@ -11,6 +11,7 @@ module.exports = {
         "jsx-a11y/click-events-have-key-events": "off",
         "no-underscore-dangle": "off",
         "no-loop-func": "off",
+        "no-param-reassign": "off",
     },
     "globals": {
         "window": true,
