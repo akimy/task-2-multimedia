@@ -8,6 +8,7 @@ const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 const videoElement = document.querySelector('.video-instance');
 const sceneElement = document.querySelector('.scene');
 const interfaceElement = document.querySelector('.interface');
+const containerElement = document.querySelector('.container');
 
 // Предустановленная ширина и высота (для повышения производительности на слабых устройствах)
 let [width, height] = [770, 650];
@@ -23,7 +24,15 @@ voice.setRate(1);
 voice.setPitch(0.4);
 voice.setText('Movement');
 
-const videoScene = new VideoScene(videoElement, audioCtx, sceneElement, width, height, voice);
+const videoScene = new VideoScene(
+  videoElement,
+  audioCtx,
+  sceneElement,
+  width,
+  height,
+  voice,
+  containerElement,
+);
 videoScene.load();
 
 const ui = new TerminatorInterface(interfaceElement, width, height);

@@ -16,7 +16,15 @@ export default class VideoScene extends CanvasBase {
    * @param {number} height - высота холста
    * @param {SynteticSpeech} voiceInstance - экземпляр класса для проигрывания голоса
    */
-  constructor(videoElement, audioCtx, canvasElement, width, height, voiceInstance) {
+  constructor(
+    videoElement,
+    audioCtx,
+    canvasElement,
+    width,
+    height,
+    voiceInstance,
+    containerElement,
+  ) {
     super(canvasElement, width, height);
     this.constraints = { audio: true, video: { width, height } }; // желаемое разрешение с камеры
     this.video = videoElement;
@@ -24,6 +32,7 @@ export default class VideoScene extends CanvasBase {
     this.detected = false;
     this.detectingInProcess = false;
     this.speaker = voiceInstance;
+    this.containerElement = containerElement;
 
     // Установка начальных значений для детектирования
     this.rgb = { r: 0, g: 0, b: 0 };
@@ -46,7 +55,7 @@ export default class VideoScene extends CanvasBase {
 
     navigator.mediaDevices.getUserMedia(this.constraints)
       .then((stream) => {
-        this.video.src = URL.createObjectURL(stream);
+        this.video.srcObject = stream;
         const source = audioCtx.createMediaStreamSource(stream);
         source.connect(analyser);
         this.animate();
@@ -75,9 +84,11 @@ export default class VideoScene extends CanvasBase {
          + Math.abs(oldRgb.b - rgb.b);
       if (diff > 7) {
         speaker.speak();
+        this.containerElement.classList.add('red');
         this.setDetected(true);
         this.setDetectedInProcess(true);
         setTimeout(() => {
+          this.containerElement.classList.remove('red');
           this.setDetectedInProcess(false);
           this.setOldRGB(rgb);
         }, 2500);

@@ -24,7 +24,7 @@ body {
 }
 
 .scene {
-    filter: contrast(300%) brightness(80%);
+    filter: contrast(140%);
     mix-blend-mode: multiply;
     box-shadow: 1px 1px 12px #e27f05;
 }
@@ -65,9 +65,14 @@ body {
 .container {
     width: 772px;
     height: 650px;
-    background-color: red;
+    background-color: darkorange;
     position: relative;
     margin: auto;
+    transition: background-color 1s linear;
+}
+
+.red {
+    background-color: red;
 }
 
 @media (max-width: 770px) {
