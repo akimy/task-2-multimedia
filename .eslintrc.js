@@ -19,5 +19,6 @@ module.exports = {
         "requestAnimationFrame": true,
         "document": true,
         "AudioContext": true,
+        "URL": true,
     }
 };

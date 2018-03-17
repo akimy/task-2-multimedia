@@ -26,7 +26,7 @@ body {
 .scene {
     filter: contrast(300%) brightness(80%);
     mix-blend-mode: multiply;
-    border: 2px dashed red;
+    box-shadow: 1px 1px 12px #e27f05;
 }
 
 .interface, .waveshape {
