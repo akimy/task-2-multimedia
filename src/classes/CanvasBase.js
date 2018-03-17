@@ -1,7 +1,8 @@
 /**
  * @class CanvasBase - Абстрактный класс  предназначенный для наследования. Является родителем
- * для холстов Canvas во всем этом проекте. Устанавливает контекст, заданную ширину и высоту
-*/
+ * для холстов Canvas во всем этом проекте. Устанавливает контекст, заданную ширину и высоту,
+ * шрифт OCR-A, ширину линии карандаша
+ */
 export default class CanvasBase {
   /**
    * @param {DOMElement} canvasElement - DOM-элемент холста .
@@ -10,8 +11,11 @@ export default class CanvasBase {
    */
   constructor(canvasElement, width, height) {
     [canvasElement.width, canvasElement.height] = [width, height];
-    this.el = canvasElement;
     [this.width, this.height] = [width, height];
-    this.ctx = canvasElement.getContext('2d');
+
+    const ctx = canvasElement.getContext('2d');
+    ctx.lineWidth = 2;
+    ctx.font = '20px OCR-A';
+    this.ctx = ctx;
   }
 }
