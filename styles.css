@@ -10,6 +10,15 @@ body, html {
     height: 100%;
 }
 
+body {
+    background: url(./assets/images/background.jpg);
+    background-repeat: repeat;
+    background-size: 300px;
+    display: flex;
+    align-items: center;
+    align-content: center;
+}
+
 .video-instance {
     display: none;
 }
@@ -17,26 +26,56 @@ body, html {
 .scene {
     filter: contrast(300%) brightness(80%);
     mix-blend-mode: multiply;
+    border: 2px dashed red;
 }
 
-.interface {
+.interface, .waveshape {
     position: absolute;
     top: 0;
     left: 0;
+}
+
+.interface {
     z-index: 2;
 }
 
-.container {
-    width: 100%;
-    height: 100%;
-    background-color: red;
+@keyframes rotateBiohazard {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(120deg);
+    }
 }
 
-.av-color {
+.biohazard {
     position: absolute;
+    z-index: 3;
+    width: 80px;
     right: 10px;
     top: 10px;
+    animation: rotateBiohazard 1s linear infinite;
+    mix-blend-mode: overlay;
+}
+
+.waveshape {
     z-index: 4;
+}
+
+.container {
+    width: 772px;
+    height: 650px;
+    background-color: red;
+    position: relative;
+    margin: auto;
+}
+
+@media (max-width: 770px) {
+    .container {
+        width: 100%;
+        height: 100%;
+        background-color: red;
+    }
 }
 
 @keyframes avarageColorDashes {
@@ -46,13 +85,4 @@ body, html {
     100% {
         stroke-dashoffset: 305px;
     }
-}
-
-.av-color__rect {
-    width: 100px;
-    stroke-width: 4px;
-    stroke: white;
-    stroke-dasharray: 15 5 15 5 15 100;
-    height: 100px;
-    animation: avarageColorDashes 2.5s linear infinite
 }
