@@ -9,6 +9,7 @@ const videoElement = document.querySelector('.video-instance');
 const sceneElement = document.querySelector('.scene');
 const interfaceElement = document.querySelector('.interface');
 const containerElement = document.querySelector('.container');
+const muteButton = document.querySelector('.mute-speech');
 
 // Предустановленная ширина и высота (для повышения производительности на слабых устройствах)
 let [width, height] = [770, 650];
@@ -32,9 +33,14 @@ const videoScene = new VideoScene(
   height,
   voice,
   containerElement,
+  muteButton,
 );
 videoScene.load();
 
 const ui = new TerminatorInterface(interfaceElement, width, height);
 ui.connectScene(videoScene)
   .then(terminatorInterface => terminatorInterface.animate());
+
+muteButton.addEventListener('click', () => {
+  videoScene.toggleMuteSpeech();
+});

@@ -63,11 +63,12 @@ export default class TerminatorInterface extends CanvasBase {
    * Очищает холст интерфейса
    */
   clearCanvas() {
-    this.ctx.clearRect(0, 0, 400, 400);
+    this.ctx.clearRect(0, 0, this.width, this.height);
   }
 
   /**
    * Устанавливает цвет заливки
+   * @returns {Promise}
    */
   setFillStyle(value) {
     this.ctx.fillStyle = value;
@@ -82,18 +83,21 @@ export default class TerminatorInterface extends CanvasBase {
   }
 
   /** Рисует гистограмму звуковой волны (Waveshape) на координате 10, 180
-   * Графика рисуется посредством итерации по буферу данных из аудиопотока
+   * Графика рисуется посредством итерации по буферу данных из аудиопотока, так же рисует среднюю
+   * громкость в аудиопотоке
    */
   drawHistogramm() {
     this.setFillStyle('rgb(200, 200, 200)');
     this.setStrokeStyle('rgb(204, 255, 255)');
     this.analyser.getByteTimeDomainData(this.dataArray);
     this.ctx.beginPath();
-    const sliceWidth = 320 * 1.0 / this.bufferLength;
+    const sliceWidth = 320 / this.bufferLength;
     let x = 10;
+    let waveVolumeValues = 0;
     for (let i = 0; i < this.bufferLength; i += 1) {
-      const v = this.dataArray[i] / 128.0;
-      const y = 180 + v * 120 / 2;
+      const v = this.dataArray[i] / 128 * 60;
+      waveVolumeValues += Math.abs(this.dataArray[i] - 128);
+      const y = 180 + v;
       if (i === 0) {
         this.ctx.moveTo(x, y);
       } else {
@@ -102,6 +106,21 @@ export default class TerminatorInterface extends CanvasBase {
       x += sliceWidth;
     }
     this.ctx.stroke();
+    this.drawAverageVolume(waveVolumeValues);
+  }
+
+  /**
+   * Рисует цветной столб громкости в правом-нижнем углу
+   * @param {number} waveVolumeValues - сумма громкостей из аудио буфера
+   */
+  drawAverageVolume(waveVolumeValues) {
+    const averageVolume = (waveVolumeValues / this.bufferLength) * 15 + 20;
+    const fragments = Math.min(Math.round(averageVolume / 5), 75);
+
+    for (let i = 0; i <= fragments; i += 1) {
+      this.setFillStyle(`rgb(${Math.min(i * 5, 255)}, ${Math.max(255 - i * 3, 0)}, 50)`);
+      this.ctx.fillRect(this.width - 35, this.height - 5 - i * 5, 30, -3);
+    }
   }
 
   /**

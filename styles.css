@@ -75,6 +75,31 @@ body {
     background-color: red;
 }
 
+.mute-speech {
+    font-family: OCR-A, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: lightgray;
+    border: 2px solid red;
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    width: 250px;
+    height: 35px;
+    cursor: pointer;
+    font-size: 15px;
+    background: transparent;
+    transition: 0.3s;
+    z-index: 5;
+    outline: none;
+}
+
+.mute-speech:hover {
+    background-color: rgba(255, 0, 0, 0.356);
+}
+
+.mute-speech:active {
+    background-color: rgba(255, 0, 0, 0.733);
+}
+
 @media (max-width: 770px) {
     .container {
         width: 100%;

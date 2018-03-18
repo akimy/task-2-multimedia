@@ -24,6 +24,7 @@ export default class VideoScene extends CanvasBase {
     height,
     voiceInstance,
     containerElement,
+    muteButton,
   ) {
     super(canvasElement, width, height);
     this.constraints = { audio: true, video: { width, height } }; // желаемое разрешение с камеры
@@ -33,6 +34,8 @@ export default class VideoScene extends CanvasBase {
     this.detectingInProcess = false;
     this.speaker = voiceInstance;
     this.containerElement = containerElement;
+    this.muteSpeech = true;
+    this.muteButton = muteButton;
 
     // Установка начальных значений для детектирования
     this.rgb = { r: 0, g: 0, b: 0 };
@@ -43,13 +46,13 @@ export default class VideoScene extends CanvasBase {
    * Метод выполняющий загрузку аудио и видеопотока в класс
    * магические константы в методе - работа с WebAudio API (установка размера буфера,
    *  сглаживание, e.t.c.) по авершению загрузки начинается анимация отрисовки буфера видео
-  */
+   */
   load() {
     const { audioCtx } = this;
     const analyser = audioCtx.createAnalyser();
     analyser.minDecibels = -80;
     analyser.maxDecibels = -8;
-    analyser.smoothingTimeConstant = 0.4;
+    analyser.smoothingTimeConstant = 0.7;
     analyser.fftSize = 2048;
     this.analyser = analyser;
 
@@ -65,9 +68,22 @@ export default class VideoScene extends CanvasBase {
   /**
    * Публичный метод для связи с интерфейсом
    * @returns analyser - возвращает ноду анализатора
-  */
+   */
   getAnalyser() {
     return this.analyser;
+  }
+
+  /**
+   * Публичный метод для связи с эвент-листенером кнопки переключения синтетического голоса
+   */
+  toggleMuteSpeech() {
+    if (this.muteSpeech) {
+      this.muteSpeech = false;
+      this.muteButton.innerHTML = 'TURN OFF SYNHTHSPEECH';
+    } else {
+      this.muteSpeech = true;
+      this.muteButton.innerHTML = 'TURN ON SYNHTHSPEECH';
+    }
   }
 
   /**
@@ -83,7 +99,9 @@ export default class VideoScene extends CanvasBase {
       const diff = Math.abs(oldRgb.r - rgb.r) + Math.abs(oldRgb.g - rgb.g)
          + Math.abs(oldRgb.b - rgb.b);
       if (diff > 7) {
-        speaker.speak();
+        if (!this.muteSpeech) {
+          speaker.speak();
+        }
         this.containerElement.classList.add('red');
         this.setDetected(true);
         this.setDetectedInProcess(true);
@@ -102,7 +120,7 @@ export default class VideoScene extends CanvasBase {
    * Устанавливает значение детекта. Если True - значит в данный момент зафиксированно
    * движение
    * @param {bool} bool
-   */
+  */
   setDetected(bool) {
     this.detected = bool;
   }
@@ -110,7 +128,7 @@ export default class VideoScene extends CanvasBase {
   /**
    * Возвращает значение детекта для связи с интерфейсом терминатора.
    * @returns {bool} detected - возвращает текущее значение детекта.
-   */
+  */
   getDetected() {
     return this.detected;
   }
@@ -118,7 +136,7 @@ export default class VideoScene extends CanvasBase {
   /**
    * Устанавливает значение процесса детекта (необходимо для флайтайма)
    * @param {bool} bool
-   */
+  */
   setDetectedInProcess(bool) {
     this.detectingInProcess = bool;
   }
@@ -126,7 +144,7 @@ export default class VideoScene extends CanvasBase {
   /**
    * Устанавливает текущее значение RGB
    * @param {Object} newRGB - объект вида {r, g, b} - трехканальный формат цвета
-   */
+  */
   setRGB(newRGB) {
     this.rgb = newRGB;
   }
@@ -134,7 +152,7 @@ export default class VideoScene extends CanvasBase {
   /**
    * Устанавливает новое-старое значение RGB (для сравнения)
    * @param {Object} newOldRGB - объект вида {r, g, b} - трехканальный формат цвета
-   */
+  */
   setOldRGB(newOldRGB) {
     this.oldRgb = newOldRGB;
   }
@@ -149,7 +167,7 @@ export default class VideoScene extends CanvasBase {
 
   /**
    * Рисует изображение с видеопотока
-   */
+  */
   drawVideo() {
     this.ctx.drawImage(this.video, 0, 0, this.width, this.height);
   }
