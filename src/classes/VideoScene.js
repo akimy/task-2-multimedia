@@ -109,7 +109,7 @@ export default class VideoScene extends CanvasBase {
           this.containerElement.classList.remove('red');
           this.setDetectedInProcess(false);
           this.setOldRGB(rgb);
-        }, 2500);
+        }, 3500);
       } else {
         this.setDetected(false);
       }
