@@ -1,7 +1,8 @@
 /**
  * @class SynteticSpeech - класс для создания экземпляра для воспроизведения
- * синтетического голоса c помощью Web Speech API
+ * синтетического голоса c помощью Yandex speechKit
 */
+
 export default class SynteticSpeech {
   /**
    * @param {string} language - выбранная локаль.
@@ -9,42 +10,37 @@ export default class SynteticSpeech {
    * @param {EventTarget} SpeechSynthesisUtterance - класс из лексического окружения для
    * генерации речи
    */
-  constructor(language, SpeechSynthesis, SpeechSynthesisUtterance) {
-    const msg = new SpeechSynthesisUtterance('');
-    msg.lang = language;
-    this.msg = msg;
-    this.speechSynthesis = SpeechSynthesis;
+  constructor(ttsInstance) {
+    this.tts = ttsInstance;
   }
 
   /**
-   * Устанавливает скорость чтения голоса
-   * @param {number} value
+   * Устанавливает массив случайных фраз
+   * @param {Array} arr - массив слов
    */
-  setRate(value) {
-    this.msg.rate = value;
+  setWords(arr) {
+    this.words = arr;
   }
 
   /**
-   * Устанавливает высоту голоса
-   * @param {number} value
+   * Возвращает случайное слово из списка
    */
-  setPitch(value) {
-    this.msg.pitch = value;
-  }
-
-  /**
-   * Устанавливает сообщение для чтения
-   * @param {string} value
-   */
-  setText(value) {
-    this.msg.text = value;
+  getRandomWord() {
+    return this.words[Math.floor(Math.random() * this.words.length - 1)];
   }
 
   /**
    * Воспроизводит сообщение
    */
   speak() {
-    const { speechSynthesis, msg } = this;
-    speechSynthesis.speak(msg);
+    this.tts.speak(this.getRandomWord());
+  }
+
+  /**
+   * Воспроизводит конкретное сообщение
+   * @param {string} word
+   */
+  speakWord(word) {
+    this.tts.speak(word);
   }
 }

@@ -92,7 +92,7 @@ export default class VideoScene extends CanvasBase {
    */
   detectMove() {
     const {
-      detectingInProcess, oldRgb, rgb, speaker,
+      detectingInProcess, oldRgb, rgb,
     } = this;
 
     if (!detectingInProcess) {
@@ -100,7 +100,7 @@ export default class VideoScene extends CanvasBase {
          + Math.abs(oldRgb.b - rgb.b);
       if (diff > 7) {
         if (!this.muteSpeech) {
-          speaker.speak();
+          this.speaker.speak();
         }
         this.containerElement.classList.add('red');
         this.setDetected(true);
