@@ -11,6 +11,23 @@ const interfaceElement = document.querySelector('.interface');
 const containerElement = document.querySelector('.container');
 const muteButton = document.querySelector('.mute-speech');
 
+window.ya.speechkit.settings.lang = 'ru-RU';
+// API-ключ.
+window.ya.speechkit.settings.apikey = '566387b4-7405-4692-bb73-3a7ad16d725f';
+
+const tts = new ya.speechkit.Tts({
+  apikey: 'abcd..',
+  emotion: 'good',
+  speed: 1.5,
+  speaker: 'jane',
+});
+// Озвучиваем текст передавая его в метод speak()
+tts.speak('Вы используете технологию SpeechKit', {
+  speaker: 'omazh',
+  emotion: 'neutral',
+});
+
+
 // Предустановленная ширина и высота (для повышения производительности на слабых устройствах)
 let [width, height] = [770, 650];
 
